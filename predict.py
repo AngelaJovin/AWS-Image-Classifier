@@ -19,15 +19,12 @@ def arg_parser():
     
     return args
 
-
 def load_checkpoint(checkpoint_path):
     
     checkpoint = torch.load("checkpoint.pth")
     
      model = models.vgg16(pretrained=True)
-        model.name = "vgg16"
-    
-    
+        model.name = "vgg16"    
     
     for param in model.parameters(): 
         param.requires_grad = False
