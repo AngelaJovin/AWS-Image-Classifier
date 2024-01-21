@@ -17,8 +17,6 @@ def arg_parser():
     args = parser.parse_args()
     return args
 
-
-
 def train_transformer(train_dir):
    train_transforms = transforms.Compose([transforms.RandomRotation(30),
                                        transforms.RandomResizedCrop(224),
@@ -29,8 +27,6 @@ def train_transformer(train_dir):
     train_data = datasets.ImageFolder(train_dir, transform=train_transforms)
     return train_data
 
-
-
 def test_transformer(test_dir):
     test_transforms = transforms.Compose([transforms.Resize(256),
                                       transforms.CenterCrop(224),
@@ -38,8 +34,7 @@ def test_transformer(test_dir):
                                       transforms.Normalize([0.485, 0.456, 0.406], 
                                                            [0.229, 0.224, 0.225])])
     test_data = datasets.ImageFolder(test_dir, transform=test_transforms)
-    return test_data
-    
+    return test_data    
 
 def data_loader(data, train=True):
     if train: 
@@ -48,24 +43,18 @@ def data_loader(data, train=True):
         loader = torch.utils.data.DataLoader(data, batch_size=50)
     return loader
 
-
-
-
-
 def check_gpu(gpu_arg):
     if not gpu_arg:
         return torch.device("cpu")
     
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")    
     
     if device == "cpu":
         print("CUDA was not found on device, using CPU instead.")
     return device
 
 
-def primaryloader_model(architecture="vgg16"):
-    
+def primaryloader_model(architecture="vgg16"):    
     
         model = models.vgg16(pretrained=True)
         model.name = "vgg16"
@@ -93,8 +82,6 @@ def initial_classifier(model, hidden_units):
     model.classifier = classifier
     return classifier
 
-
-
 def validation(model, testloader, criterion, device):
     test_loss = 0
     accuracy = 0
@@ -110,9 +97,6 @@ def validation(model, testloader, criterion, device):
         equality = (labels.data == ps.max(dim=1)[1])
         accuracy += equality.type(torch.FloatTensor).mean()
     return test_loss, accuracy
-
-
-
 
 def network_trainer(Model, Trainloader, Testloader, Device, 
                   Criterion, Optimizer, Epochs, Print_every, Steps):
@@ -158,8 +142,6 @@ def network_trainer(Model, Trainloader, Testloader, Device,
                 model.train()
 
     return Model
-
-
 
 #Function validate_model(Model, Testloader, Device) validate the above model on test data images
 def validate_model(Model, Testloader, Device):
@@ -234,8 +216,7 @@ def main():
     model.classifier = initial_classifier(model, hidden_units=args.hidden_units)
     
     device = check_gpu(gpu_arg=args.gpu);
-    model.to(device);
-    
+    model.to(device);    
     
     if type(args.learning_rate) == type(None):
         learning_rate = 0.001
