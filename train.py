@@ -157,4 +157,19 @@ def main():
     model.to(device)
 
     learning_rate = args.learning_rate if args.learning_rate else 0.001
-    criterion
+    criterion = nn.NLLLoss()
+    optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
+
+    print_every = 30
+    steps = 0
+
+    train_model(model, trainloader, validloader, device, criterion, optimizer, args.epochs, print_every)
+
+    print("\nTraining process is completed!!")
+
+    validate_model_accuracy(model, testloader, device)
+
+    save_checkpoint(model, args.save_dir, train_data)
+
+if __name__ == '__main__':
+    main()
