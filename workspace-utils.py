@@ -1,27 +1,28 @@
 import signal
-
 from contextlib import contextmanager
-
 import requests
 
 DELAY = INTERVAL = 4 * 60  # interval time in seconds
 MIN_DELAY = MIN_INTERVAL = 2 * 60
 KEEPALIVE_URL = "https://nebula.udacity.com/api/v1/remote/keep-alive"
 TOKEN_URL = "http://metadata.google.internal/computeMetadata/v1/instance/attributes/keep_alive_token"
-TOKEN_HEADERS = {"Metadata-Flavor":"Google"}
+TOKEN_HEADERS = {"Metadata-Flavor": "Google"}
+
 
 def _request_handler(headers):
     def _handler(signum, frame):
         requests.request("POST", KEEPALIVE_URL, headers=headers)
+
     return _handler
+
 
 @contextmanager
 def active_session(delay=DELAY, interval=INTERVAL):
-   
     token = requests.request("GET", TOKEN_URL, headers=TOKEN_HEADERS).text
     headers = {'Authorization': "STAR " + token}
     delay = max(delay, MIN_DELAY)
     interval = max(interval, MIN_INTERVAL)
+
     original_handler = signal.getsignal(signal.SIGALRM)
     try:
         signal.signal(signal.SIGALRM, _request_handler(headers))
@@ -31,6 +32,7 @@ def active_session(delay=DELAY, interval=INTERVAL):
         signal.signal(signal.SIGALRM, original_handler)
         signal.setitimer(signal.ITIMER_REAL, 0)
 
+
 def keep_awake(iterable, delay=DELAY, interval=INTERVAL):
-    
-    with active_session(delay, interval): yield from iterable
+    with active_session(delay, interval):
+        yield from iterable
