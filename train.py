@@ -5,7 +5,7 @@ from torchvision import datasets, transforms, models
 from torch import nn, optim
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Train.py")
+    parser = argparse.ArgumentParser(description="train.py")
     parser.add_argument('--arch', dest="arch", action="store", default="vgg16", type=str)
     parser.add_argument('--save_dir', dest="save_dir", action="store", default="./checkpoint.pth")
     parser.add_argument('--learning_rate', dest="learning_rate", action="store", default=0.001, type=float)
