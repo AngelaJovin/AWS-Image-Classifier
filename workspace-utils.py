@@ -2,8 +2,8 @@ import signal
 from contextlib import contextmanager
 import requests
 
-DELAY = INTERVAL = 4 * 60  # interval time in seconds
-MIN_DELAY = MIN_INTERVAL = 2 * 60
+DELAY = INTERVAL = 3 * 60  # interval time in seconds
+MIN_DELAY = MIN_INTERVAL = 1.5 * 60
 KEEPALIVE_URL = "https://nebula.udacity.com/api/v1/remote/keep-alive"
 TOKEN_URL = "http://metadata.google.internal/computeMetadata/v1/instance/attributes/keep_alive_token"
 TOKEN_HEADERS = {"Metadata-Flavor": "Google"}
